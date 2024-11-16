@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "76c3e4ff-32c8-4c99-8361-f653a92a1ddd",
+		"name": "June24",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33666675",
+		"_collection_link": "https://www.postman.com/altimetry-technologist-48134575/workspace/resttesting/collection/33666675-76c3e4ff-32c8-4c99-8361-f653a92a1ddd?action=share&source=collection_link&creator=33666675"
+	},
+	"item": [
+		{
+			"name": "ListOfAllObjects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string - ID\", function () {\r",
+							"\tpm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string- name\", function () {\r",
+							"\tpm.expect(pm.response.text()).to.include(\"name\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string - data\", function () {\r",
+							"\tpm.expect(pm.response.text()).to.include(\"data\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Number of records in response is correct\", function () {\r",
+							"    // Parse the JSON response\r",
+							"    var jsonData = pm.response.json();\r",
+							"    \r",
+							"    // Check if the 'data' field exists and is an array\r",
+							"    //pm.expect(jsonData.data).to.be.an('array'); // Ensure 'data' is an array\r",
+							"    pm.expect(jsonData.length).to.eql(13);  // Validate the number of records in the 'data' array\r",
+							"    // pm.expect(jsonData[].id).to.eql(13); \r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate color and capacity in data\", function () {\r",
+							"    // Parse the JSON response\r",
+							"    var jsonData = pm.response.json();\r",
+							"    \r",
+							"    // Validate the 'color' field in the 'data' object\r",
+							"    pm.expect(jsonData[0].id).to.eql(\"1\");\r",
+							"    \r",
+							"    // Validate the 'capacity GB' field in the 'data' object\r",
+							"   pm.expect(jsonData[0].data.color).to.eql(\"Cloudy White\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Count the number of 'id' fields in the response\", function () {\r",
+							"    var jsonData = pm.response.json();  // Parse the JSON response\r",
+							"    \r",
+							"    // Use JSONPath to extract all 'id' fields\r",
+							"    var ids = pm.response.json(\"$[*].id\");\r",
+							"\r",
+							"    // Count the number of 'id' fields\r",
+							"    var idCount = ids.length;\r",
+							"\r",
+							"    // Log the count for inspection\r",
+							"    console.log('Number of \"id\" fields: ' + idCount);\r",
+							"    \r",
+							"    // Validate that the 'id' fields are counted correctly (adjust expected value as needed)\r",
+							"    pm.expect(idCount).to.eql(13);  // Expecting exactly 3 'id' fields in the response\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchByID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"product name validation\", function () {\r",
+							"\tvar jsonData = pm.response.json();\r",
+							"\tpm.expect(jsonData[0].name).to.eql(pm.variables.get(\"SearchName\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects?id={{SearchID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{SearchID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SingleSearch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"product name validation\", function () {\r",
+							"\tvar jsonData = pm.response.json();\r",
+							"\tpm.expect(jsonData.name).to.eql(pm.variables.get(\"SearchName\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects/{{SearchID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{SearchID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddObject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var idValue = jsonData.id;\r",
+							"pm.environment.set(\"extractedId\", idValue);\r",
+							"\r",
+							"console.log(\"Extracted ID: \" + idValue);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"product name validation\", function () {\r",
+							"\tvar jsonData = pm.response.json();\r",
+							"\tpm.expect(jsonData.name).to.eql(pm.variables.get(\"name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"product price validation\", function () {\r",
+							"\tvar jsonData = pm.response.json();\r",
+							"\tpm.expect(jsonData.data.price).to.eql(pm.variables.get(\"price\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"product year validation\", function () {\r",
+							"\tvar jsonData = pm.response.json();\r",
+							"\tpm.expect(jsonData.data.year).to.eql(pm.variables.get(\"year\"));\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"{{name}}\",\r\n   \"data\": {\r\n      \"year\": {{year}},\r\n      \"price\": {{price}},\r\n      \"CPU model\": \"Intel Core i9\",\r\n      \"Hard disk size\": \"1 TB\",\r\n\t\t\t\"RAM\": \"512 MB\"\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/objects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateObject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Apple MacBook Pro 20\",\r\n   \"data\": {\r\n      \"year\": 2019,\r\n      \"price\": 2049.99,\r\n      \"CPU model\": \"Intel Core i9\",\r\n      \"Hard disk size\": \"1 TB\",\r\n      \"color\": \"silver\"\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/objects/{{extractedId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{extractedId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PartialUpdateObject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\": \"Apple MacBook Pro 25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/objects/{{extractedId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{extractedId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteObject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/objects/{{extractedId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"objects",
+						"{{extractedId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,33 @@
+{
+	"id": "6f2e79e2-a1cb-46d6-86a4-84cbe0db4605",
+	"name": "UAT",
+	"values": [
+		{
+			"key": "userid",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "url",
+			"value": "https://api.restful-api.dev",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "extractedId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-11-16T07:30:28.939Z",
+	"_postman_exported_using": "Postman/11.19.0"
+}
